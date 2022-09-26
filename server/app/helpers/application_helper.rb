@@ -1,6 +1,6 @@
 module ApplicationHelper
     # DOCU: Function to check required and optional fields
-    # Triggered by: UsersController
+    # Triggered by:
     # Requires: required_fields - [], optional_fields - []
     # Last updated at: September 26, 2022
     # Owner: Adrian
@@ -26,5 +26,30 @@ module ApplicationHelper
         end
 
         return response_data
+    end
+
+    # DOCU: Function encrypt basic information
+    # Triggered by:
+    # Last updated at: September 26, 2022
+    # Owner: Adrian
+    def encrypt text
+        Base64.urlsafe_encode64( ((text.to_i*88)+ENV['HIDING_KEY'].to_i).to_s + ENV['ENCRYPTION_KEY'] + text.to_s)
+    end
+
+    # DOCU: Function decrypt basic information
+    # Triggered by:
+    # Last updated at: September 26, 2022
+    # Owner: Adrian
+    def decrypt encrypted_text
+        Base64.urlsafe_decode64(encrypted_text).split(ENV['ENCRYPTION_KEY'])[1]
+    end
+
+    # DOCU: Function to encrypt password
+    # Triggered: by
+    # Requires: password
+    # Last updated at: September 26, 2022
+    # Owner: Adrian
+    def encrypt_password(password)
+        Digest::MD5.hexdigest("#{ENV["PASSWORD_PREFIX"]}#{password}password#{ENV["PASSWORD_SUFFIX"]}")
     end
 end
