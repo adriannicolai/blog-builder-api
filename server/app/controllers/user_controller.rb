@@ -1,6 +1,3 @@
-include ApplicationHelper
-include UserHelper
-
 class UserController < ApplicationController
 	def login
 		response_data = { :status => false, :result => {}, :error => nil }
