@@ -1,3 +1,5 @@
+include ApplicationHelper
+include UserHelper
 include QueryHelper
 class User < ApplicationRecord
         # DOCU: Function to get user record dynamically
@@ -18,13 +20,21 @@ class User < ApplicationRecord
 
                     if validate_new_user_info[:status]
                         # Destructure check_register_form_fields
-                        first_name, last_name, email, password = check_register_form_fields.values_at(:first_name, :last_name, :email, :password)
+                        first_name, last_name, email, password = check_register_form_fields[:result].values_at(:first_name, :last_name, :email, :password)
 
                         # Create a new user
-                        create_user_id = "
+                        create_user_id = insert_record(["
                             INSERT INTO users (first_name, last_name, email, password, user_level, created_at, updated_at)
                             VALUES(?, ?, ?, ?, ?, NOW(), NOW())
-                        ", first_name, last_name, email, password, USER_LEVEL_ID[:admin]
+                        ", first_name, last_name, email, encrypt_password(password), USER_LEVEL_ID[:admin]])
+
+                        # Fetch created user
+                        if create_user_id.present?
+                            response_data[:status] = true
+                            response_data[:result] = self.get_user_record({ :fields_to_filter => { :id => create_user_id }})
+                        else
+                            raise "Error in creating user, Please try again later"
+                        end
                     else
                         response_data.merge!(validate_new_user_info)
                     end
