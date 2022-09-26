@@ -23,21 +23,9 @@ class UserController < ApplicationController
 		response_data = { :status => false, :result => {}, :error => nil}
 
 		begin
-			# Check for valid fields
-			check_register_form_fields = check_fields(["email", "password", "confirm_password", "first_name", "last_name"], [], params)
+			create_new_user = User.create_new_user(params)
 
-			if check_register_form_fields[:status]
-				# Proceed to registering the user if all fields are valid
-				validate_new_user_info = validate_new_user_info(check_register_form_fields[:result])
-
-				if validate_new_user_info[:status]
-					# Create a new user
-				else
-					response_data.merge!(validate_new_user_info)
-				end
-			else
-				response_data.merge!(check_register_form_fields)
-			end
+			response_data.merge!(create_new_user)
 		rescue Exception => ex
 			response_data[:error] = ex.message
 		end
