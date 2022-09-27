@@ -4,6 +4,11 @@ include QueryHelper
 class BlogTitle < ApplicationRecord
 	belongs_to :blogs
 
+		# DOCU: Function to create blog title and create default blog_title_content
+		# Triggered by: blogController
+		# Requires: params - blog_id, name
+		# Last updated at: September 27, 2022
+		# Owner: Adrian
 	def self.create_blog_title(params)
 		response_data = { :status => false, :result => {}, :error => nil }
 
@@ -21,13 +26,28 @@ class BlogTitle < ApplicationRecord
 			blog_record = Blog.get_blog_record({ :fields_to_filter =>{ :id => blog_id }})
 
 			if blog_record[:status]
-				created_blog_title_id = insert_record(["
-					INSERT INTO blog_titles (blog_id, name, created_at, updated_at) VALUES(?, ?, NOW(), NOW())
-				", blog_id, name])
+				ActiveRecord::Base.transaction do
+					# Create a blog title
+					created_blog_title_id = insert_record(["
+						INSERT INTO blog_titles (blog_id, name, created_at, updated_at) VALUES(?, ?, NOW(), NOW())
+					", blog_id, name])
 
-				blog_title_record = self.get_user_blog_title({ :fields_to_filter => { :id => created_blog_title_id }})
+					# Guard clause in creating a blog title
+					raise "Error in creating a blog title" if !created_blog_title_id.present?
 
-				response_data.merge!(blog_title_record)
+					blog_title_record = self.get_blog_title_record({ :fields_to_filter => { :id => created_blog_title_id }})
+
+					# Guard clase for blog_title_record fetching
+					raise blog_title_record[:error] if !blog_title_record[:status]
+
+					# Create a blog content
+					blog_title_content = BlogContent.create_blog_title_content({ :blog_id => blog_id, :blog_title_id => created_blog_title_id  })
+
+					# Guard clause for blog_title_content
+					raise blog_title_content[:error] if !blog_title_content[:status]
+
+					response_data.merge!({ :status => true, :result => { :blog_title => blog_title_record[:result], :blog_title_content => blog_title_content[:result] }})
+				end
 			else
 				response_data[:error] = "Failed to create blog title, Please try again later."
 			end
@@ -38,14 +58,14 @@ class BlogTitle < ApplicationRecord
 		return response_data
 	end
 
-	# DOCU: Function to fetch blog_title record dynamically
-	# Triggered by: UserModel
-	# Requires: params - fields_to_filter
-	## Optionals: params - fields_to_select
-	# Last updated at: September 27, 2022
-	# Owner: Adrian
 	private
-		def self.get_user_blog_title(params)
+		# DOCU: Function to fetch blog_title record dynamically
+		# Triggered by: UserModel
+		# Requires: params - fields_to_filter
+		## Optionals: params - fields_to_select
+		# Last updated at: September 27, 2022
+		# Owner: Adrian
+		def self.get_blog_title_record(params)
 			response_data = { :status => false, :result => {}, :error => nil }
 
 			begin
