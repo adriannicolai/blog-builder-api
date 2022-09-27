@@ -20,6 +20,7 @@ class Blog < ApplicationRecord
 				INSERT INTO blogs (user_id, name, created_at, updated_at) VALUES(?, ?, NOW(), NOW())
 			", check_blog_parameters[:result][:user_id], "Untitled Blog" ])
 
+			# TODO: Add encryption of blog details and user details
 			blog_record = self.get_blog_record({ :fields_to_filter => { :id => created_blog_id }})
 
 			response_data.merge!(blog_record)

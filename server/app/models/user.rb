@@ -30,12 +30,13 @@ class User < ApplicationRecord
 
                         if created_user_id.present?
                             # Fetch created user
-                            user_details = self.get_user_record({ :fields_to_filter => { :id => created_user_id }, :fields_to_select => "first_name, last_name, email"})
+                            # TODO: Add encryption of user details
+                            user_details = self.get_user_record({ :fields_to_filter => { :id => created_user_id } })
 
                             # Create a new vlog
                             blog_details = Blog.create_blog({:user_id => created_user_id})
 
-                            response_data.merge!(blog_details[:status] ? { :result => { :user_details => user_details[:result], :blog_details => blog_details[:result] }} : { :error => "Error in creating user and blog record. Please try again later." })
+                            response_data.merge!(blog_details[:status] ? { :result => { :user_details => user_details, :blog_details => blog_details[:result] }} : { :error => "Error in creating user and blog record. Please try again later." })
                         else
                             raise "Error in creating user, Please try again later."
                         end
