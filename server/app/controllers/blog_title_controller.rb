@@ -6,8 +6,4 @@ class BlogTitleController < ApplicationController
 	def update_blog_title
 
 	end
-
-	def create_blog_title
-
-	end
 end
