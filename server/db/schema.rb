@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_26_062434) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_27_012922) do
+  create_table "blogs", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "users_id", null: false
+    t.string "name"
+    t.string "blog_logo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["users_id"], name: "index_blogs_on_users_id"
+  end
+
   create_table "users", charset: "utf8mb3", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
@@ -21,4 +30,5 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_26_062434) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "blogs", "users", column: "users_id"
 end
