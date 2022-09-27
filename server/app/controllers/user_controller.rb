@@ -1,4 +1,8 @@
 class UserController < ApplicationController
+	# DOCU: Function for user login
+    # Triggered by: (POST) /user/register
+    # Last updated at: September 27, 2022
+    # Owner: Adrian
 	def login
 		response_data = { :status => false, :result => {}, :error => nil }
 
@@ -11,10 +15,9 @@ class UserController < ApplicationController
 		render :json => response_data
 	end
 
-	# DOCU: API for registering user
-    # Triggered by: (GET) /user/register
-	# Session - POST
-    # Last updated at: September 26, 2022
+	# DOCU: Function registering user
+    # Triggered by: (POST) /user/register
+    # Last updated at: September 27, 2022
     # Owner: Adrian
 	def register
 		response_data = { :status => false, :result => {}, :error => nil}
