@@ -5,7 +5,7 @@ class User < ApplicationRecord
         # DOCU: Function to get user record dynamically
         # Triggered by: UserController
         # Requires: params - first_name, last_name, email, password, user_level
-        # Last updated at: September 26, 2022
+        # Last updated at: September 27, 2022
         # Owner: Adrian
         def self.create_new_user(params)
             response_data = { :status => false, :result => {}, :error => nil }
@@ -23,17 +23,21 @@ class User < ApplicationRecord
                         first_name, last_name, email, password = check_register_form_fields[:result].values_at(:first_name, :last_name, :email, :password)
 
                         # Create a new user
-                        create_user_id = insert_record(["
+                        created_user_id = insert_record(["
                             INSERT INTO users (first_name, last_name, email, password, user_level, created_at, updated_at)
                             VALUES(?, ?, ?, ?, ?, NOW(), NOW())
                         ", first_name, last_name, email, encrypt_password(password), USER_LEVEL_ID[:admin]])
 
-                        # Fetch created user
-                        if create_user_id.present?
-                            response_data[:status] = true
-                            response_data[:result] = self.get_user_record({ :fields_to_filter => { :id => create_user_id }})
+                        if created_user_id.present?
+                            # Fetch created user
+                            user_details = self.get_user_record({ :fields_to_filter => { :id => created_user_id }})
+
+                            # Create a new vlog
+                            blog_details = Blog.create_blog({:user_id => created_user_id})
+
+                            response_data.merge!(blog_details[:status] ? { :result => { :user_details => user_details[:result], :blog_details => blog_details[:result] }} : { :error => "Error in creating user and blog record. Please try again later." })
                         else
-                            raise "Error in creating user, Please try again later"
+                            raise "Error in creating user, Please try again later."
                         end
                     else
                         response_data.merge!(validate_new_user_info)
@@ -75,12 +79,7 @@ class User < ApplicationRecord
                 # Run the select query
                 user_record = query_record(select_user_query)
 
-                if user_record.present?
-                    response_data[:status] = true
-                    response_data[:result] = user_record
-                else
-                    response_data[:error] = "User not found"
-                end
+                response_data.merge!(user_record.present? ? { :status => true, :result => user_record } : { :error => "User not found."})
             rescue Exception => ex
                 response_data[:error] = ex.message
             end
