@@ -26,11 +26,11 @@ class User < ApplicationRecord
                         created_user_id = insert_record(["
                             INSERT INTO users (first_name, last_name, email, password, user_level, created_at, updated_at)
                             VALUES(?, ?, ?, ?, ?, NOW(), NOW())
-                        ", first_name, last_name, email, encrypt_password(password), USER_LEVEL_ID[:admin]])
+                        ", first_name.titleize, last_name.titleize, email.downcase, encrypt_password(password), USER_LEVEL_ID[:admin]])
 
                         if created_user_id.present?
                             # Fetch created user
-                            user_details = self.get_user_record({ :fields_to_filter => { :id => created_user_id }})
+                            user_details = self.get_user_record({ :fields_to_filter => { :id => created_user_id }, :fields_to_select => "first_name, last_name, email"})
 
                             # Create a new vlog
                             blog_details = Blog.create_blog({:user_id => created_user_id})
@@ -67,7 +67,7 @@ class User < ApplicationRecord
                 params[:fields_to_select] ||= "*"
 
                 select_user_query = ["
-                    SELECT #{ActiveRecord::Base.sanitize_sql(params[:fields_to_select])}
+                    SELECT #{ActiveRecord::Base.sanitize_sql(params[:fields_to_select])}, CONCAT(first_name, ' ', last_name) AS full_name
                     FROM users WHERE
                 "]
 
