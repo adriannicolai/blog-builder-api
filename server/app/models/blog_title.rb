@@ -81,7 +81,12 @@ class BlogTitle < ApplicationRecord
 			# Guard clause if blog is not exisitng
 			raise check_blog_record[:error] if !check_blog_record[:status]
 
-			# update_blog_title_record =
+			update_blog_title_record = self.update_blog_title_record({
+				:fields_to_filter => { :id => blog_id },
+				:fields_to_update => { :name => name }
+			})
+
+			response_data.merge!(update_blog_title_record)
 		rescue Exception => ex
 
 		end
@@ -116,6 +121,33 @@ class BlogTitle < ApplicationRecord
 				blog_record = query_record(select_blog_query)
 
 				response_data.merge!(blog_record.present? ? { :status => true, :result => blog_record } : { :error => "Error in fetching blog title record data, Please try again later." })
+			rescue Exception => ex
+				response_data[:error] = ex.message
+			end
+
+			return response_data
+		end
+
+		# DOCU: Function to update blog_title record dynamically
+		# Triggered by: BlogTitleModel
+		# Requires: params - fields_to_filter, fields_to_update
+		# Last updated at: September 28, 2022
+		# Owner: Adrian
+		def self.update_blog_title_record(params)
+			response_data = { :status => false, :result => {}, :error => nil }
+
+			begin
+				update_form_title_query = ["
+					UPDATE blog_titles SET #{params[:fields_to_update].map{ |key, value| "#{key} = '#{ActiveRecord::Base.sanitize_sql(value)}'"}.join(",")}
+					WHERE
+				"]
+
+				params[:fields_to_filter].each_with_index do |(field, value), index|
+					update_form_title_query[0] += " #{'AND' if index > 0} #{field} #{field.is_a?(Array)	 ? 'IN(?)' : '=?'}"
+					update_form_title_query    << value
+				end
+
+				response_data.merge!(update_record(update_form_title_query).present? ? { :status => true } : { :error => "Error in updating blog title record. Please try again later."})
 			rescue Exception => ex
 				response_data[:error] = ex.message
 			end
