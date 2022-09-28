@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get 'blog_title/create_blog_title'
-  get 'blog_title/update_blog_title'
 	# Route for users
 	scope "user" do
 		post "login"	   => "user#login"
@@ -16,8 +14,15 @@ Rails.application.routes.draw do
 		post "update_log"  => "blog#update_log"
 	end
 
+	# Route for blog titles
 	scope "blog_title" do
 		post "create_blog_title" => "blog_title#create_blog_title"
 		post "update_blog_title" => "blog_title#update_blog_title"
+	end
+
+	# Route for blog contents
+	scope "blog_content" do
+		post "create_blog_content" => "blog_content#create_blog_content"
+		post "update_blog_content" => "blog_content#update_blog_content"
 	end
 end
