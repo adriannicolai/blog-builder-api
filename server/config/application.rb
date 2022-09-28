@@ -30,9 +30,6 @@ module BlogBuilder
 		# Set the app to be api only
 		config.api_only = true
 
-		# Auto delete temporary files
-		config.middleware.use Rack::Tempfilereaper
-
 		# Add host here
 		# config.hosts << "blog_builderapi.com"
 	end
