@@ -86,7 +86,14 @@ class BlogTitle < ApplicationRecord
 				:fields_to_update => { :name => name }
 			})
 
-			response_data.merge!(update_blog_title_record)
+			# Handle update form title response
+			if update_blog_title_record[:status]
+				response_data[:status] = true
+				response_data[:result] = { :name => name }
+			else
+				response_data[:error] = update_blog_title_record[:error]
+
+			end
 		rescue Exception => ex
 
 		end
