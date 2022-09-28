@@ -1,6 +1,7 @@
 class UserController < ApplicationController
 	# DOCU: Function for user login
     # Triggered by: (POST) /user/register
+	# Requires params - email, pasword
     # Last updated at: September 27, 2022
     # Owner: Adrian
 	def login
@@ -17,6 +18,7 @@ class UserController < ApplicationController
 
 	# DOCU: Function registering user
     # Triggered by: (POST) /user/register
+	# Requires params - first_name, last_name, email, pasword, confirm_passsword
     # Last updated at: September 27, 2022
     # Owner: Adrian
 	def register

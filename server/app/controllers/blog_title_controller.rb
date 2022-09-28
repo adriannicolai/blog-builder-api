@@ -1,6 +1,7 @@
 class BlogTitleController < ApplicationController
 	# DOCU: Function for creating blog_title
     # Triggered by: (POST) /blog_title/create_blog_title
+	# Requires params - blog_id, name
     # Last updated at: September 27, 2022
     # Owner: Adrian
 	def create_blog_title
@@ -19,6 +20,7 @@ class BlogTitleController < ApplicationController
 
 	# DOCU: Function for updating blog_title
     # Triggered by: (POST) /blog_title/update_blog_title
+	# Requires params - blog_id, name
     # Last updated at: September 28, 2022
     # Owner: Adrian
 	def update_blog_title
