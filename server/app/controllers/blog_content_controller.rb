@@ -16,7 +16,22 @@ class BlogContentController < ApplicationController
         render :json => response_data
     end
 
+    # DOCU: Function update blog content
+    # Triggered by: (POST) /blog_content/create_blog_content
+    # Requires params - blog_id, content
+    # Last updated at: September 28, 2022
+    # Owner: Adrian
     def update_blog_content
+        response_data = { :status => false, :result => {}, :error => nil }
 
+        begin
+            update_blog_content = BlogContent.update_blog_content(params)
+
+            response_data.merge!(update_blog_content)
+        rescue Exception => ex
+            response_data[:error] = ex.message
+        end
+
+        render :json => response_data
     end
 end
