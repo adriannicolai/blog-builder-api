@@ -29,5 +29,8 @@ module BlogBuilder
 
 		# Set the app to be api only
 		config.api_only = true
+
+		# Auto delete temporary files
+		config.middleware.use Rack::Tempfilereaper
 	end
 end
