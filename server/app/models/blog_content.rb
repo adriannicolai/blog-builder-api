@@ -4,6 +4,11 @@ class BlogContent < ApplicationRecord
     belongs_to :blogs
     belongs_to :blog_titles
 
+	# DOCU: Function to Create blog title content
+	# Triggered by: BlogTitleModel
+	# Requires: params - blog_id, blog_title_id
+	# Last updated at: September 27, 2022
+	# Owner: Adrian
     def self.create_blog_title_content(params)
       	response_data = { :status => false, :result => {}, :error => nil }
 
@@ -46,7 +51,7 @@ class BlogContent < ApplicationRecord
 		# DOCU: Function to fetch blog_content_record dynamically
 		# Triggered by: BlogContentModel
 		# Requires: params - fields_to_filter
-		## Optionals: params - fields_to_select
+		# Optionals: params - fields_to_select
 		# Last updated at: September 27, 2022
 		# Owner: Adrian
 		def self.get_blog_content_record(params)
