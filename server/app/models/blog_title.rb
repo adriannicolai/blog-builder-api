@@ -58,11 +58,42 @@ class BlogTitle < ApplicationRecord
 		return response_data
 	end
 
+	# DOCU: Function to update blog_title_content
+	# Triggered by: UserModel
+	# Requires: params - fields_to_filter
+	# Last updated at: September 28, 2022
+	# Owner: Adrian
+	def self.update_blog_title(params)
+		response_data = { :status => false, :result => {}, :error => nil }
+
+		begin
+			# Check fields for check_blog_title_params
+			check_blog_title_params = check_fields(["blog_id", "name"], [], params)
+
+			raise check_blog_title_params[:error] if !check_blog_title_params[:status]
+
+			# Desctructure check_blog_title_params
+			blog_id, name = check_blog_title_params[:result].values_at(:blog_id, :name)
+
+			# Check if blog is existing
+			check_blog_record = self.get_blog_title_record({ :fields_to_filter => { :id => blog_id }})
+
+			# Guard clause if blog is not exisitng
+			raise check_blog_record[:error] if !check_blog_record[:status]
+
+			# update_blog_title_record =
+		rescue Exception => ex
+
+		end
+
+		return response_data
+	end
+
 	private
 		# DOCU: Function to fetch blog_title record dynamically
 		# Triggered by: UserModel
 		# Requires: params - fields_to_filter
-		## Optionals: params - fields_to_select
+		# Optionals: params - fields_to_select
 		# Last updated at: September 27, 2022
 		# Owner: Adrian
 		def self.get_blog_title_record(params)
