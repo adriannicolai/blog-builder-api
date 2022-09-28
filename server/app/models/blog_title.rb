@@ -4,11 +4,11 @@ include QueryHelper
 class BlogTitle < ApplicationRecord
 	belongs_to :blogs
 
-		# DOCU: Function to create blog title and create default blog_title_content
-		# Triggered by: blogController
-		# Requires: params - blog_id, name
-		# Last updated at: September 27, 2022
-		# Owner: Adrian
+	# DOCU: Function to create blog title and create default blog_title_content
+	# Triggered by: blogController
+	# Requires: params - blog_id, name
+	# Last updated at: September 28, 2022
+	# Owner: Adrian
 	def self.create_blog_title(params)
 		response_data = { :status => false, :result => {}, :error => nil }
 
