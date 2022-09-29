@@ -24,5 +24,6 @@ Rails.application.routes.draw do
 	scope "blog_content" do
 		post "create_blog_content" => "blog_content#create_blog_content"
 		post "update_blog_content" => "blog_content#update_blog_content"
+		post "delete_blog_content" => "blog_content#delete_blog_content"
 	end
 end
