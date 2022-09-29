@@ -101,6 +101,53 @@ class BlogTitle < ApplicationRecord
 		return response_data
 	end
 
+	# DOCU: Function to fetch blog_title_contents
+	# Triggered by: BlogTitleContentController
+	# Requires: params - blog_title_id
+	# Last updated at: September 28, 2022
+	# Owner: Adrian
+	def self.get_blog_title_contents(params)
+		response_data = { :status => false, :result => {}, :error => nil }
+
+		begin
+			# Check bot_title_content_parameters
+			check_blog_title_content_parameters = check_fields(["blog_title_id"], [], params)
+
+			# Guard clause for check_blog_title_content_parameters
+			raise check_blog_title_content_parameters[:error] if !check_blog_title_content_parameters[:status]
+
+			# Destructure check_blog_title_content_parameters
+			blog_title_id = check_blog_title_content_parameters[:result].values_at(:blog_title_id)
+
+			blog_title_contents = query_record(["
+				SELECT
+					blog_titles.id AS blog_title_id,
+					blog_titles.name AS blog_name,
+					JSON_ARRAYAGG(
+						JSON_OBJECT(
+							'blog_content_id', blog_contents.id,
+							'blog_content', blog_contents.content
+						)
+					) AS blog_contents
+				FROM blog_titles
+				INNER JOIN blog_contents ON blog_titles.blog_id = blog_contents.blog_id
+				WHERE blog_titles.id = ? AND blog_contents.blog_title_id = ?
+			", blog_title_id, blog_title_id])
+
+			if blog_title_contents.present?
+				blog_title_contents["blog_contents"] = JSON.parse(blog_title_contents["blog_contents"]) if blog_title_contents["blog_contents"].present?
+
+				response_data[:result] = blog_title_contents
+			else
+				response_data[:error] = "No Blog contents found."
+			end
+		rescue Exception => ex
+			response_data[:error] = ex.message
+		end
+
+		return response_data
+	end
+
 	private
 		# DOCU: Function to fetch blog_title record dynamically
 		# Triggered by: UserModel
