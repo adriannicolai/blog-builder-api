@@ -1,4 +1,5 @@
 include ApplicationHelper
+include QueryHelper
 class Blog < ApplicationRecord
 	belongs_to :users
 
