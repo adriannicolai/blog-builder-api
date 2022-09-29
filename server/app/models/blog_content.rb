@@ -49,29 +49,29 @@ class BlogContent < ApplicationRecord
 
 	# DOCU: Function to update blog title content
 	# Triggered by: BlogContentController
-	# Requires: params - blog_id, content
-	# Last updated at: September 28, 2022
+	# Requires: params - blog_content_id, content
+	# Last updated at: September 29, 2022
 	# Owner: Adrian
 	def self.update_blog_content(params)
 		response_data = { :status => false, :result => {}, :error => nil }
 
 		begin
 			# Check parameters before updating
-			check_blog_content_parameters = check_fields(["blog_id", "content"], [], params)
+			check_blog_content_parameters = check_fields(["blog_content_id", "content"], [], params)
 
 			# Guard clause for check_blog_content_parameters
 			raise check_blog_content_parameters[:error] if !check_blog_content_parameters[:status]
 
 			# Destructure check_blog_content_parameters
-			blog_id, content = check_blog_content_parameters[:result].values_at(:blog_id, :content)
+			blog_content_id, content = check_blog_content_parameters[:result].values_at(:blog_content_id, :content)
 
 			# Check if the blog content is existing
-			blog_content_record = self.get_blog_content_record({ :fields_to_filter => { :id => blog_id }})
+			blog_content_record = self.get_blog_content_record({ :fields_to_filter => { :id => blog_content_id }})
 
 			if blog_content_record[:status]
 				# Update the blog_content_record
 				update_blog_content_record = self.update_blog_content_record({
-					:fields_to_filter => { :id      => blog_id },
+					:fields_to_filter => { :id      => blog_content_id },
 					:fields_to_update => { :content => content }
 				})
 
