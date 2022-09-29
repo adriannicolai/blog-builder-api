@@ -34,4 +34,23 @@ class BlogContentController < ApplicationController
 
         render :json => response_data
     end
+
+    # DOCU: Function delete blog content
+    # Triggered by: (POST) /blog_content/create_blog_content
+    # Requires params - blog_content_id
+    # Last updated at: September 29, 2022
+    # Owner: Adrian
+    def delete_blog_content
+        response_data = { :status => false, :result => {}, :error => nil }
+
+        begin
+            delete_blog_content = BlogContent.delete_blog_content(params)
+
+            response_data.merge!(delete_blog_content)
+        rescue Exception => ex
+            response_data[:error] = ex.message
+        end
+
+        render :json => response_data
+    end
 end
