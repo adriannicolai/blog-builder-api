@@ -18,8 +18,8 @@ class BlogContentController < ApplicationController
 
     # DOCU: Function update blog content
     # Triggered by: (POST) /blog_content/create_blog_content
-    # Requires params - blog_id, content
-    # Last updated at: September 28, 2022
+    # Requires params - blog_content_id, content
+    # Last updated at: September 29, 2022
     # Owner: Adrian
     def update_blog_content
         response_data = { :status => false, :result => {}, :error => nil }
