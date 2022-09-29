@@ -1,6 +1,6 @@
 USER_LEVEL_ID = {
-    :admin => 0,
-    :user  => 1
+    :admin => 1,
+    :user  => 0
 }
 
 BOLLEAN_FIELD = {

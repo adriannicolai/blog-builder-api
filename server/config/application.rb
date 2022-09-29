@@ -29,5 +29,8 @@ module BlogBuilder
 
 		# Set the app to be api only
 		config.api_only = true
+
+		# Add host here
+		# config.hosts << "blog_builderapi.com"
 	end
 end

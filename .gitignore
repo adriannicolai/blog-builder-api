@@ -33,3 +33,32 @@ tmp/pids/*
 /server/tmp
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+/server/log
+
+# Ignore files in client side
+# Logs
+client/logs
+*.log
+client/npm-debug.log*
+client/yarn-debug.log*
+client/yarn-error.log*
+client/pnpm-debug.log*
+client/lerna-debug.log*
+
+client/node_modules
+client/dist
+client/dist-ssr
+*.local
+
+client/pnpm-lock.yaml
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
