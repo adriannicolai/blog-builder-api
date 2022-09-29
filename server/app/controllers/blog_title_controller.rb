@@ -1,4 +1,23 @@
 class BlogTitleController < ApplicationController
+	# DOCU: Function for fetching blog_title with content blog_title
+    # Triggered by: (GET) /blog_title/get_blog_tittle
+	# Requires params - blog_title_id
+    # Last updated at: September 29, 2022
+    # Owner: Adrian
+	def get_blog_title_contents
+		response_data = { :status => false, :result => {}, :error => nil }
+
+		begin
+			get_blog_title = BlogTitle.get_blog_title_contents(params)
+
+			response_data.merge!(get_blog_title)
+		rescue Exception => ex
+			response_data[:error] = ex.message
+		end
+
+		render :json => response_data
+	end
+
 	# DOCU: Function for creating blog_title
     # Triggered by: (POST) /blog_title/create_blog_title
 	# Requires params - blog_id, name

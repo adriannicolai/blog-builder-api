@@ -1,4 +1,5 @@
 include ApplicationHelper
+include QueryHelper
 class Blog < ApplicationRecord
 	belongs_to :users
 
@@ -31,10 +32,42 @@ class Blog < ApplicationRecord
 		return response_data
 	end
 
+	# DOCU: Function to show the blog data titles
+	# Triggered by: BlogController
+	# Requires: params - blog_id
+	# Last updated at: September 29, 2022
+	# Owner: Adrian
+	def self.get_blog_data(params)
+		response_data = { :status => false, :result => {} , :error => nil }
+
+		begin
+			# Check fields for user data
+			check_blog_parameters = check_fields(["blog_id"], [], params)
+
+			# Guard clause for blog parameters
+			raise check_blog_parameters[:error] if !check_blog_parameters[:status]
+
+			# Desctructure check_blog_parameters
+			blog_id = check_blog_parameters[:result].values_at(:blog_id)
+
+			blog_record = query_records(["
+				SELECT blog_titles.id, blog_titles.name FROM blogpost.blogs
+				INNER JOIN blog_titles ON blog_titles.blog_id = blogs.id
+				WHERE blog_id = ?
+			", blog_id ])
+
+			response_data.merge!(blog_record.present? ? { :status => true, :result => blog_record } : { :error => "Error in fetching blog_record" })
+		rescue Exception => ex
+			response_data[:error] = ex.message
+		end
+
+		return response_data
+	end
+
 	# DOCU: Function to fetch blog record dynamically
 	# Triggered by: UserModel
 	# Requires: params - fields_to_filter
-	## Optionals: params - fields_to_select
+	# Optionals: params - fields_to_select
 	# Last updated at: September 27, 2022
 	# Owner: Adrian
 	private
