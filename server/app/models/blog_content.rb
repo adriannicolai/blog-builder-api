@@ -92,6 +92,38 @@ class BlogContent < ApplicationRecord
 		return response_data
 	end
 
+	# DOCU: Function to delete blog_content_record dynamically
+	# Triggered by: BlogContentController
+	# Requires: params - blog_content_id
+	# Last updated at: September 29, 2022
+	# Owner: Adrian
+	def self.delete_blog_content(params)
+		response_data = { :status => false, :result => {}, :error => nil }
+
+		begin
+			# Check for delete_blog_content_parameters
+			check_delete_blog_content_parameters = check_fields(["blog_content_id"], [], params)
+
+			# Guard clase for checking blog_content_parameters
+			raise check_delete_blog_content_parameters[:error] if !check_delete_blog_content_parameters[:status]
+
+			# Destructure check_create_blog_title_content_parameters
+			blog_content_id = check_delete_blog_content_parameters[:result].values_at(:blog_content_id)
+
+			# Check if the blog_content is existing
+			blog_record = self.get_blog_content_record({ :fields_to_filter => { :id => blog_content_id }})
+
+			# Guard clause for invalid blog id
+			raise blog_record[:error] if !blog_record[:status]
+
+			response_data.merge!(self.delete_blog_content_record({ :fields_to_filter => { :id => blog_content_id }}))
+		rescue Exception => ex
+			response_data[:error] = ex.message
+		end
+
+		return response_data
+	end
+
 	private
 		# DOCU: Function to fetch blog_content_record dynamically
 		# Triggered by: BlogContentModel
@@ -125,6 +157,7 @@ class BlogContent < ApplicationRecord
 
 			return response_data
 		end
+
 		# DOCU: Function to update blog_content_record dynamically
 		# Triggered by: BlogContentModel
 		# Requires: params - fields_to_filter, fields_to_update
@@ -145,6 +178,30 @@ class BlogContent < ApplicationRecord
 				end
 
 				response_data.merge!(update_record(update_blog_content_query).present? ? { :status => true } : { :error => "Error in updating blog content record, Please try again later."})
+			rescue Exception => ex
+				response_data[:error] = ex.message
+			end
+
+			return response_data
+		end
+
+		# DOCU: Function to delete blog_content_record dynamically
+		# Triggered by: BlogContentModel
+		# Requires: params - fields_to_filter
+		# Last updated at: September 29, 2022
+		# Owner: Adrian
+		def self.delete_blog_content_record(params)
+			response_data = { :status => false, :result => {}, :error => nil }
+
+			begin
+				delete_blog_content_query = [" DELETE FROM blog_contents WHERE "]
+
+				params[:fields_to_filter].each_with_index do |(field, value), index|
+					delete_blog_content_query[0] += " #{'AND' if index > 0} #{field} #{field.is_a?(Array) ? 'IN(?)' : '=?'}"
+					delete_blog_content_query    << value
+				end
+
+				response_data.merge!(delete_record(delete_blog_content_query).present? ? { :status => true } : { :error => "Error in deleting blog content record, Please try again later." })
 			rescue Exception => ex
 				response_data[:error] = ex.message
 			end
