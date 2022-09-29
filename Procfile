@@ -1,0 +1,1 @@
+web: cd sever && rake db:migrate && rails s -e staging -p 3000
