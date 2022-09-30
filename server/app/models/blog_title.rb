@@ -104,7 +104,7 @@ class BlogTitle < ApplicationRecord
 	# DOCU: Function to fetch blog_title_contents
 	# Triggered by: BlogTitleContentController
 	# Requires: params - blog_title_id
-	# Last updated at: September 28, 2022
+	# Last updated at: September 30, 2022
 	# Owner: Adrian
 	def self.get_blog_title_contents(params)
 		response_data = { :status => false, :result => {}, :error => nil }
@@ -122,7 +122,7 @@ class BlogTitle < ApplicationRecord
 			blog_title_contents = query_record(["
 				SELECT
 					blog_titles.id AS blog_title_id,
-					blog_titles.name AS blog_name,
+					blog_titles.name AS blog_title_name,
 					JSON_ARRAYAGG(
 						JSON_OBJECT(
 							'blog_content_id', blog_contents.id,
