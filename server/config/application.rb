@@ -31,6 +31,6 @@ module BlogBuilder
 		config.api_only = true
 
 		# Add host here
-		# config.hosts << "blog_builderapi.com"
+		config.hosts << "https://blog-builder-ceb.herokuapp.com/"
 	end
 end
