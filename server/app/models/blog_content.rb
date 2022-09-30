@@ -161,7 +161,7 @@ class BlogContent < ApplicationRecord
 		# DOCU: Function to update blog_content_record dynamically
 		# Triggered by: BlogContentModel
 		# Requires: params - fields_to_filter, fields_to_update
-		# Last updated at: September 28, 2022
+		# Last updated at: September 30, 2022
 		# Owner: Adrian
 		def self.update_blog_content_record(params)
 			response_data = { :status => false, :result => {}, :error => nil }
@@ -172,7 +172,7 @@ class BlogContent < ApplicationRecord
 					WHERE
 				"]
 
-				params[:fields_to_update].each_with_index do |(field, value), index|
+				params[:fields_to_filter].each_with_index do |(field, value), index|
 					update_blog_content_query[0] += " #{"AND" if index > 0} #{field} #{field.is_a?(Array) ? "IN(?)" : "=?"}"
 					update_blog_content_query    << value
 				end
