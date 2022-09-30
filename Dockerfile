@@ -1,4 +1,8 @@
 # docker build --tag blog_builder_api .
+
+# heroku stack:set container --app blog-builder-ceb
+# Note: App name in heroku is blog-builder-ceb
+
 # docker run -p 3000:3000 blog_builder_api
 
 FROM ruby:3.1.2-alpine
