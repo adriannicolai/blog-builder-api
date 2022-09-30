@@ -1,3 +1,10 @@
+# docker build --tag blog_builder_api .
+
+# heroku stack:set container --app blog-builder-ceb
+# Note: App name in heroku is blog-builder-ceb
+
+# docker run -p 3000:3000 blog_builder_api
+
 FROM ruby:3.1.2-alpine
 RUN apk add --update --virtual \
     runtime-deps \
@@ -27,6 +34,6 @@ RUN yarn install
 RUN bundle install
 
 ENTRYPOINT [ "bin/rails" ]
-CMD ["s", "-b", "0.0.0.0"]
+CMD ["s", "-b", "0.0.0.0", "-e", "staging"]
 
 EXPOSE 3000

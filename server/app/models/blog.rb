@@ -51,7 +51,7 @@ class Blog < ApplicationRecord
 			blog_id = check_blog_parameters[:result].values_at(:blog_id)
 
 			blog_record = query_records(["
-				SELECT blog_titles.id, blog_titles.name FROM blogpost.blogs
+				SELECT blog_titles.id, blog_titles.name FROM blogs
 				INNER JOIN blog_titles ON blog_titles.blog_id = blogs.id
 				WHERE blog_id = ?
 			", blog_id ])
