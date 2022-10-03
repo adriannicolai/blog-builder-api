@@ -56,6 +56,38 @@ class User < ApplicationRecord
 
     end
 
+    # DOCU: Function to login user
+    # Triggered by: UserController
+    # Requires: params - email, password
+    # Last updated at: October 3, 2022
+    # Owner: Adrian
+    def self.login_user(params)
+        response_data = { :status => false, :result => {}, :error => nil }
+
+        begin
+            # Check login_user_params
+            check_login_user_params = check_fields(["email", "password"], [], params)
+
+
+            # Guard clasue for check_login_user_params
+            raise check_login_user_params[:error] if !check_login_user_params[:status]
+
+            # Destructure check_login_user_params
+            email, password = check_login_user_params[:result].values_at(:email, :password)
+
+            user_record = self.get_user_record({
+                :fields_to_filter => { :email => email, :password => encrypt_password(password) },
+                :fields_to_select => "id, email, first_name, last_name"
+            })
+
+            response_data.merge!(user_record[:status] ? user_record : { :error => "User not found." })
+        rescue Exception => ex
+            response_data[:error] = ex.message
+        end
+
+        return response_data
+    end
+
     private
         # DOCU: Function to get user record dynamically
         # Triggered by: UserController
