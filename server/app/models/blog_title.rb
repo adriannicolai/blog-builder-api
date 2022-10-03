@@ -148,9 +148,37 @@ class BlogTitle < ApplicationRecord
 		return response_data
 	end
 
+	# DOCU: Function to fetch blog_title record dynamically
+	# Triggered by: BlogTitleController
+	# Requires: params - blog_id
+	# Last updated at: October 3, 2022
+	# Owner: Adrian
+	def self.get_blog_titles(params)
+		response_data = { :status => false, :result => {}, :error => nil }
+
+		begin
+			# Check get_blog_titles_params
+			check_blog_title_params = check_fields(["blog_id"], [], params)
+
+			# Guard clause for check_blog_title_params
+			raise check_blog_title_params[:error] if !check_blog_title_params[:status]
+
+			# Destructure check_blog_title_params
+			blog_id = check_blog_title_params[:result].values_at(:blog_id)
+
+			get_blog_titles = query_records(["
+				SELECT * FROM blog_titles WHERE blog_id = ?
+			", blog_id])
+
+			response_data.merge!(get_blog_titles.present? ? { :status => true, :result => get_blog_titles } : { :error => "Error in Fetching blog titles. Please try again later" })
+		rescue Exception => ex
+			response_data[:error] = ex.message
+		end
+	end
+
 	private
 		# DOCU: Function to fetch blog_title record dynamically
-		# Triggered by: UserModel
+		# Triggered by: UserModel, BlogTitleController
 		# Requires: params - fields_to_filter
 		# Optionals: params - fields_to_select
 		# Last updated at: September 27, 2022

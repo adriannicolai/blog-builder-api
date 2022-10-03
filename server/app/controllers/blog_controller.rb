@@ -1,8 +1,8 @@
 class BlogController < ApplicationController
 	# DOCU: Function for fetching blogs
-    # Triggered by: (GET) /blog/view_blog
+    # Triggered by: (POST) /blog/view_blog
 	# Requires: params - blog_id
-    # Last updated at: September 29, 2022
+    # Last updated at: October 3, 2022
     # Owner: Adrian
 	def view_blog
 		response_data = { :status => false, :result => {}, :error => nil }
