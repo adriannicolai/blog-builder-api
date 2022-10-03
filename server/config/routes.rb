@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
 	# Route for blogs
 	scope "blog" do
-		get  "view_blog"   => "blog#view_blog"
+		post  "view_blog"   => "blog#view_blog"
 
 		post "create_blog" => "blog#create_blog"
 		post "update_log"  => "blog#update_log"
@@ -16,7 +16,8 @@ Rails.application.routes.draw do
 
 	# Route for blog titles
 	scope "blog_title" do
-		get "get_blog_title_contents"    => "blog_title#get_blog_title_contents"
+		post "get_blog_titiles"	      => "blog_title#get_blog_titiles"
+		post "get_blog_title_contents" => "blog_title#get_blog_title_contents"
 
 		post "create_blog_title" => "blog_title#create_blog_title"
 		post "update_blog_title" => "blog_title#update_blog_title"
@@ -24,7 +25,7 @@ Rails.application.routes.draw do
 
 	# Route for blog contents
 	scope "blog_content" do
-		get "get_blog_content"     => "blog_content#get_blog_content"
+		post "get_blog_content"     => "blog_content#get_blog_content"
 
 		post "create_blog_content" => "blog_content#create_blog_content"
 		post "update_blog_content" => "blog_content#update_blog_content"
