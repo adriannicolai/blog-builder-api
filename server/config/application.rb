@@ -32,5 +32,8 @@ module BlogBuilder
 
 		# Add host here
 		config.hosts << "blog-builder-ceb.herokuapp.com"
+		# TODO: remove later temporary fix
+		config.hosts << "localhost"
+
 	end
 end
