@@ -57,9 +57,9 @@ class BlogTitleController < ApplicationController
 	end
 
 	# DOCU: Function for fetching all toe blog titles
-    # Triggered by: (POST) /blog_title/update_blog_ti
+    # Triggered by: (GET) /blog_title/update_blog_ti
 	# Requires params - blog_id, name
-    # Last updated at: September 28, 2022
+    # Last updated at: October 10, 2022
     # Owner: Adrian
 	def get_blog_titles
 		response_data = { :status => false, :result => {}, :error => nil }
