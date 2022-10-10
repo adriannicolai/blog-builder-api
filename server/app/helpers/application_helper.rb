@@ -30,10 +30,10 @@ module ApplicationHelper
 
     # DOCU: Function encrypt basic information
     # Triggered by:
-    # Last updated at: September 26, 2022
+    # Last updated at: October 10, 2022
     # Owner: Adrian
     def encrypt text
-        Base64.urlsafe_encode64( ((text.to_i*88)+ENV['HIDING_KEY'].to_i).to_s + ENV['ENCRYPTION_KEY'] + text.to_s)
+        Base64.urlsafe_encode64(((text.to_i*88)+ENV['HIDING_KEY'].to_i).to_s + ENV['ENCRYPTION_KEY'] + text.to_s)
     end
 
     # DOCU: Function decrypt basic information
