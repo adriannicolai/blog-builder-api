@@ -104,7 +104,7 @@ class BlogTitle < ApplicationRecord
 	# DOCU: Function to fetch blog_title_contents
 	# Triggered by: BlogTitleContentController
 	# Requires: params - blog_title_id
-	# Last updated at: September 30, 2022
+	# Last updated at: October 10, 2022
 	# Owner: Adrian
 	def self.get_blog_title_contents(params)
 		response_data = { :status => false, :result => {}, :error => nil }
@@ -137,6 +137,7 @@ class BlogTitle < ApplicationRecord
 			if blog_title_contents.present?
 				blog_title_contents["blog_contents"] = JSON.parse(blog_title_contents["blog_contents"]) if blog_title_contents["blog_contents"].present?
 
+				response_data[:status] = true
 				response_data[:result] = blog_title_contents
 			else
 				response_data[:error] = "No Blog contents found."
